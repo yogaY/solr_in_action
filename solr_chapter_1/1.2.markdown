@@ -17,7 +17,7 @@
 设想现在为潜在的购房者设计一个房地产搜索的web应用，主要的用例就是用户通过浏览器搜索出售房.图1.1展示了这个虚拟软件的快照，不要过多关注于UI设计，这只是一个教学模型，重要的是去了解Solr可以支持的操作
 
 图1.1 展示Solr特性的虚拟web搜索应用的教学模型快照
-![图1.1 展示Solr特性的虚拟web搜索应用的教学模型快照](http://v1.freep.cn/3tb_140731111752maov512293.jpg)
+![图1.1 展示Solr特性的虚拟web搜索应用的教学模型快照](https://raw.githubusercontent.com/yyjtry/solr_in_action/master/solr_chapter_1/1.1.jpg)
 
 查看图1.1的快照来探索Solr的关键特性，从左上方开始，顺时针方向，Solr提供强力的关键字查询。如1.1.2所说，给用户提高良好的关键字查询也需要复杂的机制，Solr通过上图的查询框提供。同时Solr还提供拼写检查（实时输入建议）、词组查询、同义词，还有文本分析去处理查询项目的语言变异问题（如buying a house 和 purchase a home） 。
 
@@ -39,7 +39,7 @@ Solr基于开源的Java信息检索库Apache Lucene，在章节3中会详细介�
 Lucene是用户建立及管理*反向索引*的Java库，*反向索引*是用来匹配文本文档查询的特殊数据结构。图1.2展示了应用于我们的示例房产搜索应用的一个简单的Lucene反向索引。
 
 图1.2 信息检索的关键数据结构式反向索引
-![图1.2](http://v1.freep.cn/3tb_140731130010tsa3512293.png)
+![图1.2](https://raw.githubusercontent.com/yyjtry/solr_in_action/master/solr_chapter_1/1.2.png)
 
 在第三节中你会了解反向索引的工作原理，现在只需要看看图1.2去大致了解下新文档是如何被加入索引以及如何使用反向索引进行搜索的。
 
@@ -73,7 +73,7 @@ Lucene是用户建立及管理*反向索引*的Java库，*反向索引*是用来
 Solr是运行在现代Java Servlet容器（如Jetty，Tomcat）或J2EE应用服务器（JBoss，Oracle AS）中的Java web 应用，图1.3为Solr服务器的主要组件。
 
 图1.3 Solr4的主要组件图
-![图1.3](http://v2.freep.cn/3tb_140731135829vnq5512293.png)
+![图1.3](https://raw.githubusercontent.com/yyjtry/solr_in_action/master/solr_chapter_1/1.3.png)
 
 无可否认，图1.3第一眼看上去简直巨大。先扫一眼对感受一下这些术语，对其中的一些字段或者概念不熟悉这是很正常的。读完这边书后，你应该就对图1.3的这些概念应该都有很深的理解了。
 

@@ -1,8 +1,8 @@
-# Solr_in_Action 
+# Solr_in_Action 2.1
 
 标签： 翻译 solr_in_action
 
-作业部落编写，[zybuluo](https://www.zybuluo.com/tsihedeyo/note/25071),可见图片
+作业部落编写，[zybuluo](https://www.zybuluo.com/tsihedeyo/note/25071)，可见图片
 
 [TOC]
 
@@ -54,9 +54,9 @@
 加压后源码包目录结构 如图2.1
 
 **图2.1 solr-4.7.0源码结构，本书中所有的顶层目录为$SOLR_INSTALL/**
-![图2.1] (http://v2.freep.cn/3tb_140731162733n570512293.png)
+![图2.1] (https://raw.githubusercontent.com/yyjtry/solr_in_action/master/solr_chapter_1/1.4.png)
 
-你解压源码的目录为$SOLR_INSTALL，$SOLOR_HOME另有所指，所以不用这个名字。
+你解压源码的目录为`$SOLR_INSTALL`，`$SOLOR_HOME`另有所指，所以不用这个名字。
 
 ---
 
@@ -77,12 +77,12 @@
  http://localhost:8983/solr进行验证。图2.2是Solr 管理员控制台的一个快照，瞄一眼习惯下布局以及控制台的一些工具。
  
  **图2.2 Solr 4.7 管理员控制界面，提供了丰富的工具。点击Collection1链接获取更多工具，这其中就包括了搜索表单。**
- ![图2.2](http://v1.freep.cn/3tb_140731163732he23512293.png)
+![图2.2](https://raw.githubusercontent.com/yyjtry/solr_in_action/master/solr_chapter_1/1.5.png)
  
 在后台，start.jar启动了Jetty服务器，监听了8983端口。Solr就是个运行在Jetty内的web应用。图2.3显示了你电脑上运行的程序。
 
 **图2.3 在系统看来，Solr是个基于Java的Jetty服务器上的一个Solr web应用(solr.war)。每一个Jetty服务器上有个Solr home 目录集，按照Java的特征为solr.solr.home。Solr的一台服务器可以支持多个cores，而每个core在home目录下有单独的目录（如collection1）,其中包括了core-specfic配置以及索引（data）。**
-![图2.3](http://v2.freep.cn/3tb_14073116411799l4512293.png)
+![图2.3](https://raw.githubusercontent.com/yyjtry/solr_in_action/master/solr_chapter_2/2.3.png)
 
 
 ####**排错**
@@ -108,6 +108,67 @@
 在Solr中，一个core有一堆配置文件、Lucenen 索引文件、Solr的事务日志组成。Jetty中跑的一个Solr服务器可以支持多个cores。回想在第一章我们设计的房产搜索应用，它一个core处理房子，另一个core处理土地信息。由于这两种索引信息差别大到我们需要构建两种不同的索引，所以我们开了两个core。我们在2.1.2中启动的示例服务器只有一个叫collection1的core。
 
 声明：Solrs使用了字段collection，集合这个概念只有在分布式部署情况，索引被分布式放在多个服务器的时候才有意义。单服务器下更容易理解core，分布式collection与core的区别在章节13中讨论。
+
+Solr home是包裹着一个或多个core的目录，单核或者是多核的配置在配置文件solr.xml中。solr.xml主要是针对于分布式配置，对于目前的示例程序来说，你可以忽略它。Solr也提供了增删查改core的API以方便编程，在12章中将探讨这些API。
+
+当前你需要理解的是每个Solr服务器只有且仅有一个solr home 目录。Java的系统配置solr.solr.home设定了Solr 的home目录。图2.4显示了对于这个示例Solr服务器的缺省Solr home目录。
+
+**图2.4 Solr示例的缺省Solr home目录，包含了一个在solr.xml中配置命名为collection1的core，collection1目录对应着名为collection1的core，包含了core-specific文件、Lucene 索引以及transaction日志。**
+
+![图 2.4](https://raw.githubusercontent.com/yyjtry/solr_in_action/master/solr_chapter_2/2.4.PNG)
+
+在第4章中我们会想学习Solr的主要配置文件（solrconfig.xml），schema.xml用来配置索引结构、文本分析，章节5将会详细描述。图2.4展示就是一个Solr home目录的基本结构。
+
+为了方便探索Solr的高级功能，示例目录下还有两个Solr home 目录。其中example/example-DIH目录提供了一个core来了解Solr的DIH特性，example/multicore目录则展示了多核的配置。这些之后会继续探讨，现在继续学习示例，首先向索引中加入文件，在章节2.2中需要用到这些文件。
+
+---
+
+### 2.1.4. 为示例文档建立索引
+
+刚开始使用Solr的时候，你的索引里没有文件，现在还只是个空服务器等着你填搜索数据。在第5章中将深入学习索引，现在大概过一遍，填些数据，开始尝试查询。开一个新的命令行，输入如下：
+
+    cd $SOLR_INSTALL/example/exampledocs
+    java -jar post.jar *.xml
+    
+之后你会应该会看到如下输出：
+
+    SimplePostTool version 1.5
+    Posting files to base url http://localhost:8983/solr/update using content-
+    type application/xml..
+    POSTing file gb18030-example.xml
+    POSTing file hd.xml
+    POSTing file ipod_other.xml
+    POSTing file ipod_video.xml
+    POSTing file manufacturers.xml
+    POSTing file mem.xml
+    POSTing file money.xml
+    POSTing file monitor.xml
+    POSTing file monitor2.xml
+    POSTing file mp500.xml
+    POSTing file sd500.xml
+    POSTing file solr.xml
+    POSTing file utf8-example.xml
+    POSTing file vidcard.xml
+    14 files indexed.
+    COMMITting Solr index changes to http://localhost:8983/solr/update..
+
+post.jar文件会调用HTTP POST向Solr发送XML文件，所有的文件发送到Solr之后，post.jar会处理一个commit，使得这些示例文件能被Solr找到。在Solr管理员界面执行查询全部（\*：\*），验证post是否成功。先在左边的下拉框中选定collection1，到达查询界面，图2.5显示了成功查询后的界面。
+
+**图2.5 Solr管理界面的执行查询后的快照，以确认示例文档是否成功上传并被处理**
+![图 2.5](https://raw.githubusercontent.com/yyjtry/solr_in_action/master/solr_chapter_2/2.5.PNG)
+
+至此我们已经有了一个Solr示例，其上已经加载了一些示例文档。
+
+
+
+
+
+
+
+
+
+
+
 
 
 
